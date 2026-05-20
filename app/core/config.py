@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     log_level: str = "INFO"
 
     # Tenacity will attempt the LLM call up to this many times on TransientErrors.
-    max_llm_retries: int = 3
+    llm_max_retries: int = 3
 
     # Hard timeout passed to the OpenAI client per call (seconds).
     llm_timeout_s: int = 120

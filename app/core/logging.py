@@ -16,7 +16,8 @@ def configure_logging() -> None:
         # Merges any key=value pairs bound via structlog.contextvars into every log event.
         structlog.contextvars.merge_contextvars,
         structlog.stdlib.add_log_level,
-        structlog.stdlib.add_logger_name,
+        # add_logger_name is omitted: it requires a stdlib logger (.name attribute)
+        # but we use PrintLoggerFactory which produces a PrintLogger without one.
         structlog.processors.TimeStamper(fmt="iso"),
         structlog.processors.StackInfoRenderer(),
         # Renders attached exception info as a string field rather than a raw tuple.

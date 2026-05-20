@@ -93,7 +93,7 @@ class LLMClient:
         Called at the boundary of every instructor call so nothing from
         openai or instructor leaks into the service layer.
         """
-        # Already ours — shouldn't happen in normal flow but guard anyway.
+        # shouldn't happen in normal flow but guard anyway.
         if isinstance(exc, ExtractionError):
             return exc
 
@@ -139,7 +139,7 @@ class LLMClient:
         retry_if_exception_type(TransientError) → permanent errors fail fast.
         """
         async for attempt in AsyncRetrying(
-            stop=stop_after_attempt(self._settings.max_llm_retries),
+            stop=stop_after_attempt(self._settings.llm_max_retries),
             wait=wait_exponential_jitter(initial=1, max=60),
             retry=retry_if_exception_type(TransientError),
             before_sleep=_before_sleep_log(log),
@@ -172,7 +172,7 @@ class LLMClient:
         log.info(
             "llm_extraction_started",
             path="text",
-            model=self._settings.openai_model,
+            model=self._settings.openai_model, 
             chars=len(text),
         )
         messages: list[dict[str, Any]] = [

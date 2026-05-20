@@ -40,7 +40,6 @@ def fixed_invoice() -> ExtractedInvoice:
             invoice_date=date(2024, 1, 15),
             currency="USD",
             subtotal=Decimal("90.00"),
-            tax=Decimal("10.00"),
             total=Decimal("100.00"),
         ),
         line_items=[
@@ -114,9 +113,7 @@ async def test_extract_and_poll(
 
     # --- poll ---
     # Background tasks complete synchronously in the ASGI test transport, so
-    # the first GET already returns COMPLETED in practice.  The loop mirrors
-    # real client behaviour and guards against scheduling changes in future
-    # versions of httpx / Starlette.
+    # the first GET already returns COMPLETED in practice.
     job_data: dict = {}
     for _ in range(10):
         r = await client.get(f"/jobs/{job_id}")
