@@ -38,15 +38,13 @@ from app.models.invoice import ExtractedInvoice
 # tenacity's before_sleep_log requires a stdlib logger.  We keep one here
 # for that specific purpose, but the primary per-job logging uses structlog
 # via bind_job_id() so that job_id appears on every retry line.
-_stdlib_logger = logging.getLogger(__name__)
 
 
 def _before_sleep_log(log: Any) -> Callable[[RetryCallState], None]:
     """Return a before_sleep callback that logs through structlog with job_id.
 
     We use this instead of tenacity's before_sleep_log(stdlib_logger, ...) so
-    that every retry log line carries the job_id correlation field.  The stdlib
-    logger (above) is still available if you prefer the built-in format.
+    that every retry log line carries the job_id correlation field. 
     """
     def _log(retry_state: RetryCallState) -> None:
         exc = retry_state.outcome.exception()
@@ -162,7 +160,7 @@ class LLMClient:
 
         # Unreachable: reraise=True guarantees tenacity raises before we get here.
         # Present only to satisfy the type checker (no implicit None return).
-        raise RuntimeError("unreachable")  # pragma: no cover
+        raise RuntimeError("unreachable")  
 
     # ------------------------------------------------------------------
     # Public API

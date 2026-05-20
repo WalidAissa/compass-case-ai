@@ -48,8 +48,7 @@ def bind_job_id(job_id: str) -> structlog.stdlib.BoundLogger:
         log = bind_job_id(job_id)
         log.info("extraction_started")   # every line carries job_id=<value>
 
-    We use explicit binding (return a new logger) rather than contextvars so
-    the job_id is always visible in the call site — no hidden async-local state
-    to reason about when reading the code.
+    We use explicit binding (return a new logger) so
+    the job_id is always visible in the call site.
     """
     return structlog.get_logger().bind(job_id=job_id)
