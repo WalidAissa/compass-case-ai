@@ -1,0 +1,53 @@
+[project]
+name = "compass-doc-intel"
+version = "0.1.0"
+description = "Invoice extraction service using GPT-4o vision + structured outputs"
+requires-python = ">=3.12"
+dependencies = [
+    # Web framework
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+    "python-multipart>=0.0.12",   # required for FastAPI file uploads
+
+    # Data validation
+    "pydantic>=2.9",
+    "pydantic-settings>=2.6",
+
+    # LLM + structured outputs
+    "openai>=1.58",
+    "instructor>=1.7",            # wraps openai client; handles schema retry loop
+
+    # Resilience
+    "tenacity>=9.0",
+
+    # PDF handling
+    "pymupdf>=1.25",              # imported as `fitz`; text extraction + page rendering
+
+    # Observability
+    "structlog>=24.4",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3",
+    "pytest-asyncio>=0.24",
+    "httpx>=0.28",                # AsyncClient used by FastAPI TestClient
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+dev-dependencies = [
+    "pytest>=8.3",
+    "pytest-asyncio>=0.24",
+    "httpx>=0.28",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"             # every async test is auto-collected; no @pytest.mark.asyncio needed
+testpaths = ["tests"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
